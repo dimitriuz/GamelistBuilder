@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2016
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GamelistBuilder", "GamelistBuilder\GamelistBuilder.csproj", "{0F936DC7-555B-42F7-906A-EB157C70A019}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Tests\Tests.csproj", "{7ECF5734-D6C4-4668-BC09-D009F1C3B569}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0F936DC7-555B-42F7-906A-EB157C70A019}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F936DC7-555B-42F7-906A-EB157C70A019}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F936DC7-555B-42F7-906A-EB157C70A019}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F936DC7-555B-42F7-906A-EB157C70A019}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7ECF5734-D6C4-4668-BC09-D009F1C3B569}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7ECF5734-D6C4-4668-BC09-D009F1C3B569}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7ECF5734-D6C4-4668-BC09-D009F1C3B569}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7ECF5734-D6C4-4668-BC09-D009F1C3B569}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {288F80CB-0DF2-441D-B083-ABA905EF26EC}
+	EndGlobalSection
+EndGlobal

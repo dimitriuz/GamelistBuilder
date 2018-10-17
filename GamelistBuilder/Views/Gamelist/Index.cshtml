@@ -1,0 +1,44 @@
+﻿@model IEnumerable<Gamelist>
+
+<p>
+    <a class="btn btn-success mt-5" style="margin: 10px" asp-action="Create">Add Gamelist</a>
+</p>
+<div class="table-responsive">
+    <table class="table table-striped table-sm">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Description)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Path)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Path)
+                    </td>
+                    <td>
+                        <a class="btn btn-success" style="margin: 2px" asp-action="Open" asp-route-id="@item.Id">Open</a>
+                        <a class="btn btn-primary" style="margin: 2px" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                        <a class="btn btn-danger" style="margin: 2px" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    </div>

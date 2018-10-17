@@ -1,0 +1,12 @@
+﻿@model IEnumerable<Platform>
+
+    <div class="row">
+        @foreach (var platform in Model)
+        {
+            <h2>@platform.FullName</h2>
+            @foreach (var ext in platform.Extensions)
+            {
+                @ext
+            }
+        }
+    </div>

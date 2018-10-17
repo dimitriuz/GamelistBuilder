@@ -1,0 +1,64 @@
+﻿@model GamelistBuilder.Models.Gamelist
+
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h2>Edit Gamelist</h2>
+<hr />
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-striped table-sm">
+                    <thead>
+                        <tr>
+                            <th>
+                                Name
+                            </th>
+                            <th>
+                                Rating
+                            </th>
+                            <th>
+                                Genre
+                            </th>
+                            <th>
+                                Favorite
+                            </th>
+                            <th>
+                                Rom Found
+                            </th>
+                            <th>
+                                Image Found
+                            </th>
+                            <th>
+                                Video Found
+                            </th>
+                            <th>
+                                Marque Found
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Games)
+                        {
+                           @await Html.PartialAsync("_Game", item)
+                        }
+                    </tbody>
+                </table>
+                </div>
+
+</form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

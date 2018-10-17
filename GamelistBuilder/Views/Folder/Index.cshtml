@@ -1,0 +1,41 @@
+﻿@model FolderViewModel
+
+<div class="row">
+    <div class="col-md-12">
+        Current path: @Model.path
+    </div>
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon1">Enter path manually</span>
+        </div>
+        <input type="text" class="form-control" placeholder="path" aria-label="path" aria-describedby="basic-addon1" asp-action="Index" asp-route-path="">
+    </div>
+    <div class="col-md-12">
+        <div class="btn-group" role="group" aria-label="Drives">
+            @foreach (var drive in Model.drives)
+            {
+                <a class="btn btn-primary" asp-action="Index" asp-route-path="@drive">@drive</a>
+            }
+        </div>
+        <div class="col-md-12">
+            <ul>
+                @foreach (var directory in Model.directories)
+                {
+                    <li>
+                        <a class="bg-primary" asp-action="Index" asp-route-path="@directory">@directory</a>
+                    </li>
+                }
+            </ul>
+        </div>
+        <div class="col-md-12">
+            <ul>
+                @foreach (var file in Model.files)
+                {
+                    <li>
+                        <a asp-action="Index" asp-route-path="@file">@file</a>
+                    </li>
+                }
+            </ul>
+            <a class="btn btn-default" asp-action="Up" asp-route-path="@Model.path">Up</a>
+        </div>
+    </div>
