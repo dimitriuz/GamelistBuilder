@@ -3,17 +3,19 @@ using GamelistBuilder.Infrastructure;
 using System.Xml.Linq;
 using System.Linq;
 using GamelistBuilder.Models;
+using GamelistBuilder.Helpers;
+using System.IO;
 
 namespace Tests
 {
     [TestFixture]
     public class PlatformRepositoryTests
     {
-        PlatformRepository _repository;
+        //PlatformRepository _repository;
         [SetUp]
         public void Setup()
         {
-            _repository = new PlatformRepository();
+            //_repository = new PlatformHelper();
         }
 
         [Test]
@@ -33,7 +35,9 @@ namespace Tests
               </system>
               </systemList>
             ");
-            var result = _repository.GetListFromXML(xdoc).ToList();
+            var filename = Path.GetTempFileName();
+            xdoc.Save(filename);
+            var result = PlatformHelper.ImportPlatforms(filename).ToList();
             Assert.AreEqual(2, result.Count(), "Count of platforms unexpected");
             Assert.AreEqual("amiga", result.First().Name, "unexpected platform entry");
             Assert.AreEqual(16, result.First().Extensions.Count(), "Count of extensions unexpected");

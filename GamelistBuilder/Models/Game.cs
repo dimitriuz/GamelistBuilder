@@ -4,7 +4,7 @@ namespace GamelistBuilder.Models
 {
     public class Game : BaseModel
     {
-        public string Id { get; set; }
+        public string SourceId { get; set; }
         public string Source { get; set; }
         public string Path { get; set; }
         public string Name { get; set; }
@@ -27,5 +27,7 @@ namespace GamelistBuilder.Models
         public bool VideoFound { get; set; }
         public bool MarqueFound { get; set; }
 
+        public virtual Gamelist Gamelist { get; set; }
+        public virtual GameFolder GameFolder { get; set; }
     }
 }

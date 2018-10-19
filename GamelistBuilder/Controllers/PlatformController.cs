@@ -10,9 +10,9 @@ namespace GamelistBuilder.Controllers
 {
     public class PlatformController : Controller
     {
-        private readonly IXMLRepository<Platform> _platform;
+        private readonly IRepository<Platform> _platform;
 
-        public PlatformController(IXMLRepository<Platform> platform)
+        public PlatformController(IRepository<Platform> platform)
         {
             _platform = platform;
         }

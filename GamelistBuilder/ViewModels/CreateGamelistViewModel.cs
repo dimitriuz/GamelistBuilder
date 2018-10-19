@@ -1,13 +1,14 @@
-﻿using System;
+﻿using GamelistBuilder.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace GamelistBuilder.Models
+namespace GamelistBuilder.ViewModels
 {
-    public class Gamelist : BaseModel
+    public class CreateGamelistViewModel
     {
         [Required]
         public string Name { get; set; }
@@ -25,12 +26,7 @@ namespace GamelistBuilder.Models
         [DisplayName("Marque")]
         public string MarqueDirectory { get; set; }
 
-        public virtual Platform Platform { get; set; }
-
-        public bool Imported { get; set; }
-
-        public virtual ICollection<Game> Games { get; set; }
-        public virtual ICollection<GameFolder> GameFolders { get; set; }
-
+        //public ICollection<Platform> Platforms { get; set; }
+        public int PlatformId { get; set; }
     }
 }

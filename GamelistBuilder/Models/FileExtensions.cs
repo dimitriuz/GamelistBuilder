@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace GamelistBuilder.Models
 {
-    public class BaseModel
+    public class FileExtensions: BaseModel
     {
-        public int Id { get; set; }
+        public string Extension { get; set; }
     }
 }

@@ -6,15 +6,17 @@ using System.Threading.Tasks;
 
 namespace GamelistBuilder.Infrastructure
 {
-    public interface IRepository<T>
+    public interface IRepository<T> where T : class
     {
-        IQueryable<T> GetAll();
-        //IEnumerable<ESSystem> Find(Func<ESSystem, bool> predicate);
-        //int Count(Func<ESSystem, bool> predicate);
+        IEnumerable<T> GetAll();
+        IEnumerable<T> Find(Func<T, bool> predicate);
+        int Count(Func<T, bool> predicate);
 
-        T GetById(string id);
+        T GetById(int id);
         void Create(T entity);
         void Update(T entity);
         void Delete(T entity);
+
+
     }
 }

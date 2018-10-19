@@ -1,4 +1,4 @@
-﻿@model GamelistBuilder.Models.Gamelist
+﻿@model CreateGamelistViewModel
 
 @{
     ViewData["Title"] = "Edit";
@@ -46,6 +46,10 @@
                 <label asp-for="MarqueDirectory" class="control-label"></label>
                 <input asp-for="MarqueDirectory" class="form-control" />
                 <span asp-validation-for="MarqueDirectory" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label" asp-for="PlatformId">Platform</label>
+                <select class="form-control" asp-for="PlatformId" asp-items="ViewBag.Platforms"></select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-default" />

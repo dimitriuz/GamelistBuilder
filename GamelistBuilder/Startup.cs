@@ -11,21 +11,12 @@ namespace GamelistBuilder
 {
     public class Startup
     {
-        public IConfigurationRoot Configuration { get; }
+        public IConfiguration Configuration { get; }
 
-        public Startup(IHostingEnvironment env)
+        public Startup(IHostingEnvironment env, IConfiguration configuration)
         {
-            //var dom = new ConfigurationBuilder()
-            //    .SetBasePath(env.ContentRootPath)
-            //    .AddJsonFile("MyAppSettings.json")
-            //    .AddInMemoryCollection(new Dictionary<string, string> { { "Timezone", "+1" } })
-            //    .AddEnvironmentVariables()
-            //    .Build();
-
-            //// Save the configuration root object to a startup member for further references
-            //Configuration = dom;
+            Configuration = configuration;
         }
-
 
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
@@ -33,9 +24,10 @@ namespace GamelistBuilder
         {
             //services.AddSingleton<IConfigurationRoot>(Configuration);
 
-            services.AddTransient<IXMLRepository<Platform>, PlatformRepository>();
+            services.AddDbContext<GamelistBuilderContext>();
+            services.AddTransient<IRepository<Platform>, PlatformRepository>();
             services.AddTransient<IRepository<Gamelist>, GamelistRepository>();
-
+            services.AddTransient<IRepository<Game>, GameRepository>();
 
             services.AddMvc()
                 .AddRazorOptions(options =>
@@ -69,6 +61,9 @@ namespace GamelistBuilder
                 app.UseDeveloperExceptionPage();
                 app.UseStatusCodePagesWithReExecute("/app/error/{0}");
             }
+
+            DBInitializer.Seed(app);
+
         }
     }
 }

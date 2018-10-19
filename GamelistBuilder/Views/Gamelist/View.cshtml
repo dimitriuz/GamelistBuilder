@@ -1,0 +1,138 @@
+﻿@model GamelistBuilder.Models.Game
+
+<div>
+    <h4>Game</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.SourceId)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SourceId)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Source)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Source)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Path)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Path)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Desc)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Desc)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Rating)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Rating)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ReleaseDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ReleaseDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Developer)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Developer)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Publisher)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Publisher)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Genre)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Genre)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Players)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Players)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Hash)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Hash)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Image)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Image)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Marquee)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Marquee)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Video)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Video)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Favorite)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Favorite)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.IsFolder)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.IsFolder)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.RomFound)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.RomFound)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ImageFound)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ImageFound)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.VideoFound)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.VideoFound)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.MarqueFound)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.MarqueFound)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
