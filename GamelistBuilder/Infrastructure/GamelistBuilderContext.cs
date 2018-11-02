@@ -31,8 +31,10 @@ namespace GamelistBuilder.Infrastructure
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Game>().HasOne(p => p.Gamelist).WithMany(p => p.Games).IsRequired();
-            modelBuilder.Entity<GameFolder>().HasOne(p => p.Gamelist).WithMany(p => p.GameFolders).IsRequired();
+            //modelBuilder.Entity<Game>().HasOne(p => p.Gamelist).WithMany(p => p.Games).IsRequired();
+           // modelBuilder.Entity<Game>().HasOne(p => p.Game).WithMany(p => p.).IsRequired();
+
+            //modelBuilder.Entity<GameFolder>().HasOne(p => p.Gamelist).WithMany(f => f.Games).IsRequired();
 
         }
     }

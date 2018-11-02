@@ -18,7 +18,11 @@ namespace GamelistBuilder
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>();
+            WebHost.CreateDefaultBuilder(args).ConfigureLogging(builder => 
+            {
+                builder.SetMinimumLevel(LogLevel.Warning);
+                builder.AddConsole();
+            })
+            .UseStartup<Startup>();
     }
 }

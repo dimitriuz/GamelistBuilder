@@ -4,14 +4,16 @@ using GamelistBuilder.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GamelistBuilder.Migrations
 {
     [DbContext(typeof(GamelistBuilderContext))]
-    partial class GamelistBuilderContextModelSnapshot : ModelSnapshot
+    [Migration("20181102075210_four")]
+    partial class four
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,7 +52,8 @@ namespace GamelistBuilder.Migrations
 
                     b.Property<int?>("GameFolderId");
 
-                    b.Property<int?>("GamelistId");
+                    b.Property<int?>("GamelistId")
+                        .IsRequired();
 
                     b.Property<string>("Genre");
 
@@ -181,12 +184,13 @@ namespace GamelistBuilder.Migrations
             modelBuilder.Entity("GamelistBuilder.Models.Game", b =>
                 {
                     b.HasOne("GamelistBuilder.Models.GameFolder", "GameFolder")
-                        .WithMany("Games")
+                        .WithMany()
                         .HasForeignKey("GameFolderId");
 
                     b.HasOne("GamelistBuilder.Models.Gamelist", "Gamelist")
                         .WithMany("Games")
-                        .HasForeignKey("GamelistId");
+                        .HasForeignKey("GamelistId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("GamelistBuilder.Models.GameFolder", b =>

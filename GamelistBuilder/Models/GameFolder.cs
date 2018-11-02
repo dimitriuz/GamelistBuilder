@@ -13,9 +13,8 @@ namespace GamelistBuilder.Models
         public string Desc { get; set; }
         public string Image { get; set; }
 
-        public virtual ICollection<Game> Games {get; set; }
-
         public virtual Gamelist Gamelist { get; set; }
+        public ICollection<Game> Games { get; set; }
 
     }
 }

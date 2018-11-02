@@ -24,6 +24,7 @@ else
             <form asp-action="Edit">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <a class="btn btn-danger" asp-route-id="@Model.Id" asp-action="Clear">Clear gamelist</a>
+                <a class="btn btn-danger" asp-route-id="@Model.Id" asp-action="DeleteUnusedMedia">Delete unused media files</a>
                 <div class="table-responsive">
                     <table class="table table-striped table-sm">
                         <thead>
@@ -35,22 +36,22 @@ else
                                     Rating
                                 </th>
                                 <th>
-                                    Genre
+                                    Folder
                                 </th>
                                 <th>
                                     Favorite
                                 </th>
                                 <th>
-                                    Rom Found
+                                    Rom
                                 </th>
                                 <th>
-                                    Image Found
+                                    Image
                                 </th>
                                 <th>
-                                    Video Found
+                                    Video
                                 </th>
                                 <th>
-                                    Marque Found
+                                    Marque
                                 </th>
                                 <th></th>
                             </tr>

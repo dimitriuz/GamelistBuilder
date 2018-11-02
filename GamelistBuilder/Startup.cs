@@ -13,7 +13,7 @@ namespace GamelistBuilder
     {
         public IConfiguration Configuration { get; }
 
-        public Startup(IHostingEnvironment env, IConfiguration configuration)
+        public Startup(IHostingEnvironment env, IConfiguration configuration, ILoggerFactory logger)
         {
             Configuration = configuration;
         }
@@ -28,6 +28,7 @@ namespace GamelistBuilder
             services.AddTransient<IRepository<Platform>, PlatformRepository>();
             services.AddTransient<IRepository<Gamelist>, GamelistRepository>();
             services.AddTransient<IRepository<Game>, GameRepository>();
+            services.AddTransient<IRepository<GameFolder>, GameFolderRepository>();
 
             services.AddMvc()
                 .AddRazorOptions(options =>
@@ -49,6 +50,7 @@ namespace GamelistBuilder
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory logger)
         {
+            var log = logger.CreateLogger("Main");
 
             logger.AddConsole();
             logger.AddDebug();

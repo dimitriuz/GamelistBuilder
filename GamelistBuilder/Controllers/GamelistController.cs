@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 using GamelistBuilder.Helpers;
 using GamelistBuilder.ViewModels;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Timers;
+using System.Diagnostics;
 
 namespace GamelistBuilder.Controllers
 {
@@ -17,14 +19,16 @@ namespace GamelistBuilder.Controllers
         private IRepository<Gamelist> _repository;
         private IRepository<Platform> _platformsRepository;
         private IRepository<Game> _gamesRepository;
+        private IRepository<GameFolder> _foldersRepository;
 
 
 
-        public GamelistController(IRepository<Gamelist> repository, IRepository<Platform> platforms, IRepository<Game> games)
+        public GamelistController(IRepository<Gamelist> repository, IRepository<Platform> platforms, IRepository<Game> games, IRepository<GameFolder> folders)
         {
             _repository = repository;
             _platformsRepository = platforms;
             _gamesRepository = games;
+            _foldersRepository = folders;
         }
 
         [HttpGet]
@@ -70,6 +74,7 @@ namespace GamelistBuilder.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpGet]
         public IActionResult Edit(int id)
         {
             var data = _repository.GetById(id);
@@ -100,6 +105,61 @@ namespace GamelistBuilder.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpGet]
+        public IActionResult Delete(int id)
+        {
+            var data = _repository.GetById(id);
+            _repository.Delete(data);
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public IActionResult Open (int id)
+        {
+            var gamelist = _repository.GetById(id);
+            GamelistHelper.ProcessPaths(gamelist);
+            _repository.Update(gamelist);
+            return View(gamelist);
+        }
+
+        [HttpGet]
+        public IActionResult Clear(int id)
+        {
+            var gamelist = _repository.GetById(id);
+            gamelist.Games.Clear();
+            gamelist.GameFolders.Clear();
+            _repository.Update(gamelist);
+            return RedirectToAction("Open", new { id = gamelist.Id });
+
+        }
+
+        [HttpGet]
+        public IActionResult Import(int id)
+        {
+            var gamelist = _repository.GetById(id);
+            if (!System.IO.File.Exists(gamelist.Path))
+            {
+                ViewData["Error"] = "gamelist.xml not found at " + gamelist.Path;
+                var list = _repository.GetAll();
+                return View("Index", list);
+            }
+            var folders = GamelistHelper.GetFolders(gamelist.Path).ToList();
+            folders.ForEach(f => 
+            {
+                f.Gamelist = gamelist;
+                _foldersRepository.Create(f);
+            });
+
+            var games = GamelistHelper.GetGames(gamelist.Path).ToList();
+
+            gamelist.Games = games;
+            gamelist.GameFolders = folders;
+
+            _repository.Update(gamelist);
+            
+            return RedirectToAction("Open", new { id = gamelist.Id });
+        }
+
         [HttpPost]
         public IActionResult EditGame(Game data)
         {
@@ -111,56 +171,45 @@ namespace GamelistBuilder.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpGet]
         public IActionResult EditGame(int id)
         {
             var data = _gamesRepository.GetById(id);
             return View(data);
         }
 
-
-        public IActionResult Delete(int id)
+        [HttpGet]
+        public IActionResult DeleteFolder(int id)
         {
-            var data = _repository.GetById(id);
-            _repository.Delete(data);
-            return RedirectToAction("Index");
-        }
+            var folder = _foldersRepository.GetById(id);
 
-        public IActionResult Open (int id)
-        {
-            var gamelist = _repository.GetById(id);
-            GamelistHelper.ProcessPaths(gamelist);
-
+            //clear gamelist from folder
+            var gamelist = folder.Gamelist;
+            gamelist.GameFolders.Remove(folder);
             _repository.Update(gamelist);
-            return View(gamelist);
-        }
 
- 
-
-        public IActionResult Clear(int id)
-        {
-            var gamelist = _repository.GetById(id);
-            gamelist.Games.Clear();
-            gamelist.GameFolders.Clear();
-            _repository.Update(gamelist);
-            return RedirectToAction("Open", new { id = gamelist.Id });
-
-        }
-
-        public IActionResult Import(int id)
-        {
-            var gamelist = _repository.GetById(id);
-            if (!System.IO.File.Exists(gamelist.Path))
+            //clear games from folder
+            var games = _gamesRepository.Find(g => g.GameFolder == folder).ToList();
+            foreach (var game in games)
             {
-                ViewData["Error"] = "gamelist.xml not found at " + gamelist.Path;
-                var list = _repository.GetAll();
-                return View("Index", list);
-            }
-            var games = GamelistHelper.GetGames(gamelist.Path);
-            var folders = GamelistHelper.GetFolders(gamelist.Path);
-            gamelist.Games = games.ToList();
-            gamelist.GameFolders = folders.ToList();
-            _repository.Update(gamelist);
+                game.GameFolder = null;
+                _gamesRepository.Update(game);
+            };
+
+            //delete folder
+            _foldersRepository.Delete(folder);
+
             return RedirectToAction("Open", new { id = gamelist.Id });
         }
+
+        [HttpGet]
+        public IActionResult DeleteUnusedMedia(int id)
+        {
+            var gamelist = _repository.GetById(id);
+            GamelistHelper.DeleteUnusedMedia(gamelist);
+
+            return RedirectToAction("Open", new { id = gamelist.Id });
+        }
+
     }
 }

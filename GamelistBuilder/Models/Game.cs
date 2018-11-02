@@ -28,6 +28,9 @@ namespace GamelistBuilder.Models
         public bool MarqueFound { get; set; }
 
         public virtual Gamelist Gamelist { get; set; }
-        public virtual GameFolder GameFolder { get; set; }
+        
+        public GameFolder GameFolder { get; set; }
+        public int? GameFolderId { get; set; }
+
     }
 }

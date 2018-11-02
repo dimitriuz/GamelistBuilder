@@ -24,11 +24,10 @@ namespace GamelistBuilder.Helpers
 
         private static IQueryable<Game> GetGamesFromXML(XDocument xml)
         {
-            var games = from xe in xml.Element("gameList").Elements("game")
-                        select GetGameFromElement(xe);
             var folders = from xe in xml.Element("gameList").Elements("folder")
                           select GetFolderFromElement(xe);
-
+            var games = from xe in xml.Element("gameList").Elements("game")
+                        select GetGameFromElement(xe);
             return games.AsQueryable();
         }
 
@@ -49,13 +48,12 @@ namespace GamelistBuilder.Helpers
                 Source = XMLHelper.GetAttribute(el, "source"),
                 Path = XMLHelper.GetElement(el, "path"),
                 Desc = XMLHelper.GetElement(el, "desc"),
-                IsFolder = true
             };
 
             var str_rating = XMLHelper.GetElement(el, "rating");
             if (!string.IsNullOrWhiteSpace(str_rating))
             {
-                bool success = float.TryParse(str_rating, System.Globalization.NumberStyles.Any, CultureInfo.InvariantCulture, out float rating);
+                bool success = float.TryParse(str_rating, NumberStyles.Any, CultureInfo.InvariantCulture, out float rating);
                 if (success)
                     game.Rating = rating;
             }
@@ -76,9 +74,6 @@ namespace GamelistBuilder.Helpers
             game.Image = XMLHelper.GetElement(el, "image");
             game.Marquee = XMLHelper.GetElement(el, "marquee");
             game.Video = XMLHelper.GetElement(el, "video");
-
-            if (File.Exists(game.Image))
-                game.ImageFound = true;
 
             var str_favorite = XMLHelper.GetElement(el, "favorite");
             if (!string.IsNullOrWhiteSpace(str_favorite))
@@ -123,6 +118,8 @@ namespace GamelistBuilder.Helpers
             var ImageFiles = GetDirContent(ImagesDir);
             var VideoFiles = GetDirContent(VideoDir);
             var MarqueFiles = GetDirContent(MarqueDir);
+            
+            
 
             foreach (var game in gamelist.Games)
             {
@@ -130,7 +127,53 @@ namespace GamelistBuilder.Helpers
                 game.ImageFound = FileExists(ImageFiles, RootDir, game.Image);
                 game.VideoFound = FileExists(VideoFiles, RootDir, game.Video);
                 game.MarqueFound = FileExists(MarqueFiles, RootDir, game.Marquee);
+                game.GameFolder = getGameFolder(game, gamelist.GameFolders);
             };
+        }
+
+        public static void DeleteUnusedMedia(Gamelist gamelist)
+        {
+            var RootDir = Path.GetDirectoryName(gamelist.Path);
+            var ImagesDir = CombinePath(RootDir, gamelist.ImagesDirectory);
+            var VideoDir = CombinePath(RootDir, gamelist.VideoDirectory);
+            var MarqueDir = CombinePath(RootDir, gamelist.MarqueDirectory);
+
+            var ImageFiles = GetDirContent(ImagesDir);
+            var VideoFiles = GetDirContent(VideoDir);
+            var MarqueFiles = GetDirContent(MarqueDir);
+
+            var GamelistImageList = new List<string>();
+            var GamelistVideoList = new List<string>();
+            var GamelistMarqueList = new List<string>();
+
+            foreach (var game in gamelist.Games)
+            {
+                if (!string.IsNullOrEmpty(game.Image))
+                    GamelistImageList.Add(CombinePath(RootDir, game.Image));
+                if (!string.IsNullOrEmpty(game.Video))
+                    GamelistVideoList.Add(CombinePath(RootDir, game.Video));
+                if (!string.IsNullOrEmpty(game.Marquee))
+                    GamelistMarqueList.Add(CombinePath(RootDir, game.Marquee));
+            };
+
+            var UnusedImages = ImageFiles.Where(f => !GamelistImageList.Contains(f.FullName));
+            var UnusedVideo = VideoFiles.Where(f => !GamelistVideoList.Contains(f.FullName));
+            var UnusedMarque = MarqueFiles.Where(f => !GamelistMarqueList.Contains(f.FullName));
+
+            foreach (var file in UnusedImages)
+                file.Delete();
+
+            foreach (var file in UnusedVideo)
+                file.Delete();
+
+            foreach (var file in UnusedMarque)
+                file.Delete();
+        }
+
+        private static GameFolder getGameFolder(Game game, ICollection<GameFolder> GameFolders)
+        {
+            var folder = GameFolders.FirstOrDefault(f => game.Path.Contains(f.Path));
+            return folder;
         }
 
         private static string CombinePath(string root, string path)
@@ -141,6 +184,10 @@ namespace GamelistBuilder.Helpers
                 path = path.Substring(1);
                 path = path.Replace('/', Path.DirectorySeparatorChar);
                 path = path.Replace('\\', Path.DirectorySeparatorChar);
+                if (path.StartsWith('\\') && root.EndsWith('\\'))
+                {
+                    path = path.Substring(1);
+                };
                 path = root + path;
             }
             return path;
@@ -152,7 +199,7 @@ namespace GamelistBuilder.Helpers
                 return false;
             var fullname = CombinePath(path, filename);
             var file = files.FirstOrDefault(i => i.FullName == fullname);
-
+            
             //path = CombinePath(root, path);
 
             return file != null;

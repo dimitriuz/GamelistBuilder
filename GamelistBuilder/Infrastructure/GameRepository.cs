@@ -16,9 +16,7 @@ namespace GamelistBuilder.Infrastructure
 
         public override Game GetById(int id)
         {
-
             return _context.Games.Single(g => g.Id == id);
-            //_context.Gamelists. Single(e => e.Id == id).
         }
     }
 }
