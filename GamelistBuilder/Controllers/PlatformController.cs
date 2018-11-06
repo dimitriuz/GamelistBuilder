@@ -22,5 +22,25 @@ namespace GamelistBuilder.Controllers
 
             return View(platforms);
         }
+
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            var data = _platform.GetById(id);
+         
+            return View(data);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(Platform data)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(data);
+            };
+            _platform.Update(data);
+            return RedirectToAction("Index");
+        }
+
     }
 }

@@ -21,24 +21,14 @@ namespace GamelistBuilder.Helpers
                         {
                             Name = xe.Element("name").Value,
                             FullName = xe.Element("fullname").Value,
-                            Extensions = GetExtensions(xe.Element("extension").Value.Split(' '))
+                            Extensions = xe.Element("extension").Value
                         };
             return items.AsQueryable();
         }
 
-        private static ICollection<FileExtensions> GetExtensions(string[] extensions)
+        public static IQueryable<string> GetExtensions(Platform platform)
         {
-            ICollection<FileExtensions> result = new List<FileExtensions>();
-            foreach (var extension in extensions)
-            {
-                var Extension = new FileExtensions
-                {
-                    Extension = extension
-                };
-                result.Add(Extension);
-            }
-            return result;
+            return platform.Extensions.Split(' ').AsQueryable();
         }
-
     }
 }
