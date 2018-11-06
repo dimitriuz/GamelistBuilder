@@ -14,7 +14,6 @@ namespace GamelistBuilder.Infrastructure
         public DbSet<Game> Games { get; set; }
         public DbSet<GameFolder> Folders { get; set; }
         public DbSet<Platform> Platforms { get; set; }
-        public DbSet<FileExtensions> FileExtensions { get; set; }
 
         public IConfiguration _configuration;
 
