@@ -5,7 +5,25 @@
     ViewData["Title"] = "Edit";
 }
 
-<h2>Edit Gamelist @Model.Name</h2>
+<h2>
+    Edit Gamelist @Model.Name
+</h2>
+@if (ViewData["UnusedImages"] != null)
+{
+    <span class="badge badge-primary">Unused images: @ViewData["UnusedImages"]</span>
+}
+@if (ViewData["UnusedVideo"] != null)
+{
+    <span class="badge badge-primary">Unused videos: @ViewData["UnusedVideo"]</span>
+}
+@if (ViewData["UnusedMarquee"] != null)
+{
+    <span class="badge badge-primary">Unused marquee: @ViewData["UnusedMarquee"]</span>
+}
+@if (ViewData["NewRoms"] != null)
+{
+    <span class="badge badge-primary">Unimported roms: @ViewData["NewRoms"]</span>
+}
 <hr />
 @if (Model.Games.Count == 0)
 {
@@ -19,6 +37,7 @@
 }
 else
 {
+
     <div class="row">
         <div class="col-md-12">
             <form asp-action="Edit">

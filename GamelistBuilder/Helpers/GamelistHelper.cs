@@ -1,4 +1,5 @@
-﻿using GamelistBuilder.Models;
+﻿using GamelistBuilder.Infrastructure;
+using GamelistBuilder.Models;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -9,8 +10,9 @@ using System.Xml.Linq;
 
 namespace GamelistBuilder.Helpers
 {
-    public static class GamelistHelper
+    public class GamelistHelper
     {
+
 
         public static IQueryable<Game> GetGames(string path)
         {
@@ -127,38 +129,15 @@ namespace GamelistBuilder.Helpers
                 game.ImageFound = FileExists(ImageFiles, RootDir, game.Image);
                 game.VideoFound = FileExists(VideoFiles, RootDir, game.Video);
                 game.MarqueFound = FileExists(MarqueFiles, RootDir, game.Marquee);
-                game.GameFolder = getGameFolder(game, gamelist.GameFolders);
+                game.GameFolder = GetGameFolder(game, gamelist.GameFolders);
             };
         }
 
         public static void DeleteUnusedMedia(Gamelist gamelist)
         {
-            var RootDir = Path.GetDirectoryName(gamelist.Path);
-            var ImagesDir = CombinePath(RootDir, gamelist.ImagesDirectory);
-            var VideoDir = CombinePath(RootDir, gamelist.VideoDirectory);
-            var MarqueDir = CombinePath(RootDir, gamelist.MarqueDirectory);
-
-            var ImageFiles = GetDirContent(ImagesDir);
-            var VideoFiles = GetDirContent(VideoDir);
-            var MarqueFiles = GetDirContent(MarqueDir);
-
-            var GamelistImageList = new List<string>();
-            var GamelistVideoList = new List<string>();
-            var GamelistMarqueList = new List<string>();
-
-            foreach (var game in gamelist.Games)
-            {
-                if (!string.IsNullOrEmpty(game.Image))
-                    GamelistImageList.Add(CombinePath(RootDir, game.Image));
-                if (!string.IsNullOrEmpty(game.Video))
-                    GamelistVideoList.Add(CombinePath(RootDir, game.Video));
-                if (!string.IsNullOrEmpty(game.Marquee))
-                    GamelistMarqueList.Add(CombinePath(RootDir, game.Marquee));
-            };
-
-            var UnusedImages = ImageFiles.Where(f => !GamelistImageList.Contains(f.FullName));
-            var UnusedVideo = VideoFiles.Where(f => !GamelistVideoList.Contains(f.FullName));
-            var UnusedMarque = MarqueFiles.Where(f => !GamelistMarqueList.Contains(f.FullName));
+            var UnusedImages = GetUnusedMedia(gamelist, GamelistMediaType.Image);
+            var UnusedVideo = GetUnusedMedia(gamelist, GamelistMediaType.Video);
+            var UnusedMarquee = GetUnusedMedia(gamelist, GamelistMediaType.Marque);
 
             foreach (var file in UnusedImages)
                 file.Delete();
@@ -166,17 +145,107 @@ namespace GamelistBuilder.Helpers
             foreach (var file in UnusedVideo)
                 file.Delete();
 
-            foreach (var file in UnusedMarque)
+            foreach (var file in UnusedMarquee)
                 file.Delete();
         }
 
-        private static GameFolder getGameFolder(Game game, ICollection<GameFolder> GameFolders)
+        public static IEnumerable<FileInfo> GetUnusedMedia(Gamelist gamelist, GamelistMediaType mediaType)
+        {
+            var GamelistMediaList = new List<string>();
+            var RootDir = Path.GetDirectoryName(gamelist.Path);
+            string mediaDirectory = "";
+
+            switch (mediaType)
+            {
+                case GamelistMediaType.Image:
+                    mediaDirectory = gamelist.ImagesDirectory;
+                    break;
+                case GamelistMediaType.Video:
+                    mediaDirectory = gamelist.VideoDirectory;
+                    break;
+                case GamelistMediaType.Marque:
+                    mediaDirectory = gamelist.MarqueDirectory;
+                    break;
+                default:
+                    return new List<FileInfo>();
+            };
+
+            foreach (var game in gamelist.Games)
+            {
+                string mediaFile = "";
+                switch (mediaType)
+                {
+                    case GamelistMediaType.Image:
+                        mediaFile = game.Image;
+                        break;
+                    case GamelistMediaType.Video:
+                        mediaFile = game.Video;
+                        break;
+                    case GamelistMediaType.Marque:
+                        mediaFile = game.Marquee;
+                        break;
+                    default:
+                        continue;
+                };
+
+                if (!string.IsNullOrEmpty(mediaFile))
+                {
+
+                    GamelistMediaList.Add(CombinePath(RootDir, mediaFile));
+                };
+            }
+
+            var MediaDir = CombinePath(RootDir, mediaDirectory);
+            var MediaFiles = GetDirContent(MediaDir);
+
+            var UnusedMedia = MediaFiles.Where(f => !GamelistMediaList.Contains(f.FullName));
+
+            return UnusedMedia;
+        }
+
+        public static Gamelist ImportNewRoms(Gamelist gamelist)
+        {
+            var NewRoms = GetNewRoms(gamelist);
+            //var scraper = new ScraperSS()
+            foreach (var rom in NewRoms)
+            {
+                var newGame = new Game();
+                newGame.Gamelist = gamelist;
+                newGame.Name = rom.Name;
+                newGame.Path = rom.FullName;
+               // var scrapedGame = ScraperSS.
+                gamelist.Games.Add(newGame);
+                
+            };
+
+            return gamelist;
+        }
+
+        public static IEnumerable<FileInfo> GetNewRoms(Gamelist gamelist)
+        {
+            var GamelistRomsList = new List<string>();
+            var RootDir = Path.GetDirectoryName(gamelist.Path);
+        
+            foreach (var game in gamelist.Games)
+            {
+                    GamelistRomsList.Add(CombinePath(RootDir, game.Path));
+            }
+
+            var RomFiles = GetDirContent(RootDir);
+            var Extensions = PlatformHelper.GetExtensions(gamelist.Platform);
+
+            var NewRoms = RomFiles.Where(f => !GamelistRomsList.Contains(f.FullName) && Extensions.Contains(f.Extension));
+
+            return NewRoms;
+        }
+
+        private static GameFolder GetGameFolder(Game game, ICollection<GameFolder> GameFolders)
         {
             var folder = GameFolders.FirstOrDefault(f => game.Path.Contains(f.Path));
             return folder;
         }
 
-        private static string CombinePath(string root, string path)
+        public static string CombinePath(string root, string path)
         {
             bool relative = path[0] == '.';
             if (relative)

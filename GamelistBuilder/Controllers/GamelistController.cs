@@ -119,6 +119,16 @@ namespace GamelistBuilder.Controllers
             var gamelist = _repository.GetById(id);
             GamelistHelper.ProcessPaths(gamelist);
             _repository.Update(gamelist);
+            var UnusedImages = GamelistHelper.GetUnusedMedia(gamelist, GamelistMediaType.Image);
+            var UnusedVideo = GamelistHelper.GetUnusedMedia(gamelist, GamelistMediaType.Video);
+            var UnusedMarquee = GamelistHelper.GetUnusedMedia(gamelist, GamelistMediaType.Marque);
+            var NewRoms = GamelistHelper.GetNewRoms(gamelist);
+            ViewData["UnusedImages"] = UnusedImages.Count();
+            ViewData["UnusedVideo"] = UnusedVideo.Count();
+            ViewData["UnusedMarquee"] = UnusedMarquee.Count();
+            ViewData["NewRoms"] = NewRoms.Count();
+
+
             return View(gamelist);
         }
 
@@ -209,6 +219,24 @@ namespace GamelistBuilder.Controllers
             GamelistHelper.DeleteUnusedMedia(gamelist);
 
             return RedirectToAction("Open", new { id = gamelist.Id });
+        }
+
+        [HttpGet]
+        public IActionResult ImportNewRoms(int id)
+        {
+            var gamelist = _repository.GetById(id);
+            GamelistHelper.ImportNewRoms(gamelist);
+
+            return RedirectToAction("Open", new { id = gamelist.Id });
+        }
+
+        [HttpGet]
+        public IActionResult DeleteGame(int id)
+        {
+            var data = _gamesRepository.GetById(id);
+            var gamelistId = data.Gamelist.Id;
+            _gamesRepository.Delete(data);
+            return RedirectToAction("Open", new { id = gamelistId });
         }
 
     }

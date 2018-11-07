@@ -29,7 +29,9 @@ namespace GamelistBuilder
             services.AddTransient<IRepository<Gamelist>, GamelistRepository>();
             services.AddTransient<IRepository<Game>, GameRepository>();
             services.AddTransient<IRepository<GameFolder>, GameFolderRepository>();
+            services.AddSingleton<ScraperSS, ScraperSS>();
 
+            services.AddHttpClient();
             services.AddMvc()
                 .AddRazorOptions(options =>
             {
@@ -62,7 +64,7 @@ namespace GamelistBuilder
             {
                 app.UseDeveloperExceptionPage();
                 app.UseStatusCodePagesWithReExecute("/app/error/{0}");
-            }
+            };
 
             DBInitializer.Seed(app);
 

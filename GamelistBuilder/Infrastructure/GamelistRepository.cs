@@ -12,16 +12,16 @@ namespace GamelistBuilder.Infrastructure
 {
     public class GamelistRepository : Repository<Gamelist>
     {
-        public GamelistRepository(GamelistBuilderContext context) : base(context)
-        {
-        }
+        public GamelistRepository(GamelistBuilderContext context) : base(context) {}
 
         public override Gamelist GetById(int id)
         {
-
-            return _context.Gamelists.Include(g => g.Games).Include(g => g.GameFolders).Include(g => g.Platform).Single(g => g.Id == id);
-            //_context.Gamelists. Single(e => e.Id == id).
+            return _context.Gamelists
+                .Include(g => g.Games)
+                .Include(g => g.GameFolders)
+                .Include(g => g.Platform)
+                .Include(g => g.Platform)
+                .Single(g => g.Id == id);
         }
-
     }
 }

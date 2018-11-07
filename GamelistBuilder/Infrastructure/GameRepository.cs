@@ -1,10 +1,6 @@
 ﻿using GamelistBuilder.Models;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace GamelistBuilder.Infrastructure
 {
@@ -16,7 +12,7 @@ namespace GamelistBuilder.Infrastructure
 
         public override Game GetById(int id)
         {
-            return _context.Games.Single(g => g.Id == id);
+            return _context.Games.Include(g => g.Gamelist).Single(g => g.Id == id);
         }
     }
 }

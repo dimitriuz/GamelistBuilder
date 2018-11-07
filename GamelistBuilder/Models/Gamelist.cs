@@ -7,6 +7,13 @@ using System.Threading.Tasks;
 
 namespace GamelistBuilder.Models
 {
+    public enum GamelistMediaType
+    {
+        Image,
+        Video,
+        Marque
+    };
+
     public class Gamelist : BaseModel
     {
         [Required]
