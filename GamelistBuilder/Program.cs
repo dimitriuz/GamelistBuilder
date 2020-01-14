@@ -23,6 +23,7 @@ namespace GamelistBuilder
             {
                 builder.SetMinimumLevel(LogLevel.Warning);
                 builder.AddConsole();
+                builder.AddDebug();
             })
             .ConfigureAppConfiguration((hostingContext, config) =>
             {

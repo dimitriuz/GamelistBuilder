@@ -13,7 +13,7 @@ namespace GamelistBuilder
     {
         public IConfiguration Configuration { get; }
 
-        public Startup(IHostingEnvironment env, IConfiguration configuration, ILoggerFactory logger)
+        public Startup(IWebHostEnvironment env, IConfiguration configuration)
         {
             Configuration = configuration;
         }
@@ -32,39 +32,34 @@ namespace GamelistBuilder
             services.AddSingleton<ScraperSS, ScraperSS>();
 
             services.AddHttpClient();
-            services.AddMvc()
-                .AddRazorOptions(options =>
-            {
-                // Clear the current list of view location formats. At this time, 
-                // the list contains default view location formats.
-                options.ViewLocationFormats.Clear();
+            services.AddRazorPages();
+            //services.AddMvc()
+            //    .AddRazorOptions(options =>
+            //{
+            //    // Clear the current list of view location formats. At this time, 
+            //    // the list contains default view location formats.
+            //    options.ViewLocationFormats.Clear();
 
-                // {0} - Action Name
-                // {1} - Controller Name
-                // {2} - Area Name
-                options.ViewLocationFormats.Add("/Views/{1}/{0}.cshtml");
-                options.ViewLocationFormats.Add("/Views/Shared/{0}.cshtml");
-                options.ViewLocationFormats.Add("/Views/Shared/Layouts/{0}.cshtml");
-                options.ViewLocationFormats.Add("/Views/Shared/PartialViews/{0}.cshtml");
-            }); ;
+            //    // {0} - Action Name
+            //    // {1} - Controller Name
+            //    // {2} - Area Name
+            //    options.ViewLocationFormats.Add("/Views/{1}/{0}.cshtml");
+            //    options.ViewLocationFormats.Add("/Views/Shared/{0}.cshtml");
+            //    options.ViewLocationFormats.Add("/Views/Shared/Layouts/{0}.cshtml");
+            //    options.ViewLocationFormats.Add("/Views/Shared/PartialViews/{0}.cshtml");
+            //}); ;
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory logger)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            var log = logger.CreateLogger("Main");
-
-            logger.AddConsole();
-            logger.AddDebug();
+            //var log = logger.CreateLogger("Main");
 
             app.UseStaticFiles();
-            app.UseMvcWithDefaultRoute();
+            //app.UseMvcWithDefaultRoute();
 
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-                app.UseStatusCodePagesWithReExecute("/app/error/{0}");
-            };
+            app.UseRouting();
+            app.UseEndpoints(endpoints => { endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}"); });
 
             DBInitializer.Seed(app);
 
