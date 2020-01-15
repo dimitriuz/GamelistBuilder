@@ -10,7 +10,7 @@ namespace GamelistBuilder.Controllers
     {
         public IActionResult Index()
         {
-            return  RedirectToAction("Index", "Gamelist");
+            return RedirectToAction("Index", "Gamelist");
         }
     }
 }

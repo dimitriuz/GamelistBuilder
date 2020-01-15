@@ -21,8 +21,6 @@ namespace GamelistBuilder.Controllers
         private IRepository<Game> _gamesRepository;
         private IRepository<GameFolder> _foldersRepository;
 
-
-
         public GamelistController(IRepository<Gamelist> repository, IRepository<Platform> platforms, IRepository<Game> games, IRepository<GameFolder> folders)
         {
             _repository = repository;
