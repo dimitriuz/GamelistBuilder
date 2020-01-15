@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace GamelistBuilder.ViewModels
 {
-    public class CreateGamelistViewModel
+    public class GamelistViewModel
     {
         [Required]
         public string Name { get; set; }

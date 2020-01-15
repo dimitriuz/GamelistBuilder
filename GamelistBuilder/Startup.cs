@@ -1,10 +1,12 @@
 ﻿using GamelistBuilder.Infrastructure;
 using GamelistBuilder.Models;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
+using System.Reflection;
 
 namespace GamelistBuilder
 {
@@ -29,7 +31,7 @@ namespace GamelistBuilder
             services.AddTransient<IRepository<Game>, GameRepository>();
             services.AddTransient<IRepository<GameFolder>, GameFolderRepository>();
             services.AddSingleton<ScraperSS, ScraperSS>();
-            
+            services.AddMediatR(Assembly.GetExecutingAssembly());
             
 
             services.AddHttpClient();

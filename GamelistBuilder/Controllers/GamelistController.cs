@@ -39,14 +39,14 @@ namespace GamelistBuilder.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            var data = new CreateGamelistViewModel();
+            var data = new GamelistViewModel();
             var platforms = _platformsRepository.GetAll();
             ViewBag.Platforms = new SelectList(platforms, "Id", "Name");
             return View(data);
         }
 
         [HttpPost]
-        public IActionResult Create(CreateGamelistViewModel data)
+        public IActionResult Create(GamelistViewModel data)
         {
             if (!ModelState.IsValid)
             {
@@ -76,7 +76,7 @@ namespace GamelistBuilder.Controllers
         public IActionResult Edit(int id)
         {
             var data = _repository.GetById(id);
-            var dataVM = new CreateGamelistViewModel
+            var dataVM = new GamelistViewModel
             {
                 Description = data.Description,
                 GamesDirectory = data.GamesDirectory,

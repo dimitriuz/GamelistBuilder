@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-
+using GamelistBuilder.Commands;
+using MediatR;
+using GamelistBuilder.Models;
+using GamelistBuilder.ViewModels;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace GamelistBuilder.Controllers
@@ -11,18 +14,25 @@ namespace GamelistBuilder.Controllers
     [Route("api/[controller]")]
     public class GamelistAPIController : Controller
     {
+        private readonly IMediator mediator;
+        public GamelistAPIController(IMediator _mediator)
+        {
+            mediator = _mediator;
+        }
         // GET: api/<controller>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<IEnumerable<Gamelist>> Get()
         {
-            return new string[] { "value1", "value2" };
+            var response = await mediator.Send(new GetGamelists());
+            return response;
         }
 
         // GET api/<controller>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<GamelistViewModel> Get(int id)
         {
-            return "value";
+            var response = await mediator.Send(new GetGamelist(id));
+            return response;
         }
 
         // POST api/<controller>
